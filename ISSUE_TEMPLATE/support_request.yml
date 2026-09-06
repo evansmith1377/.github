@@ -1,0 +1,14 @@
+name: Support request
+description: Ask a question
+title: "[Question]: "
+labels: ["new", "question"]
+assignees:
+  - evansmith1377
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question or support request
+      description: What do you need help with?
+    validations:
+      required: true

@@ -1,0 +1,58 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  yaml-lint:
+    name: YAML syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          config_data: |
+            extends: default
+            rules:
+              line-length: disable
+              document-start: disable
+              truthy:
+                check-keys: false
+
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v17
+        with:
+          globs: "**/*.md"
+
+  issue-forms-validate:
+    name: Validate issue form templates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check issue form templates parse and have required keys
+        run: |
+          python3 - <<'EOF'
+          import sys, glob
+          import yaml
+
+          failed = False
+          for path in glob.glob("ISSUE_TEMPLATE/*.yml"):
+              if path.endswith("config.yml"):
+                  continue
+              with open(path) as f:
+                  data = yaml.safe_load(f)
+              for key in ("name", "description", "body"):
+                  if key not in data:
+                      print(f"::error file={path}::missing required key '{key}'")
+                      failed = True
+          sys.exit(1 if failed else 0)
+          EOF
