@@ -13,7 +13,7 @@ jobs:
     name: YAML syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ibiqlik/action-yamllint@v3
         with:
           config_data: |
@@ -28,7 +28,7 @@ jobs:
     name: Markdown lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: DavidAnson/markdownlint-cli2-action@v17
         with:
           globs: "**/*.md"
@@ -37,7 +37,7 @@ jobs:
     name: Validate issue form templates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check issue form templates parse and have required keys
         run: |
           python3 - <<'EOF'
